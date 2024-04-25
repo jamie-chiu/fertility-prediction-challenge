@@ -35,20 +35,27 @@ def clean_df(df, background_df=None):
     """
 
     ## This script contains a bare minimum working example
-    # Create new variable with age
-    df["age"] = 2024 - df["birthyear_bg"]
-
-    # Imputing missing values in age with the mean
-    df["age"] = df["age"].fillna(df["age"].mean())
 
     # Selecting variables for modelling
     keepcols = [
         "nomem_encr",  # ID variable required for predictions,
-        "age"          # newly created variable
+        "birthyear_bg",
+        "age_bg",
+        "cf20m130", # Within how many years do you hope to have your first/next child?
+        "cf20m128", # Do you think you will have children in the future?
+        "cf20m129", # How many children do you think you'll have?
+        "cf20m031" # What year did you marry?
+
     ] 
 
     # Keeping data with variables selected
     df = df[keepcols]
+
+    # Calculate the median for each column
+    medians = df.median()
+
+    # Fill missing values with the median of each column
+    df = df.fillna(medians)
 
     return df
 
